@@ -23,7 +23,7 @@ pickering-yt-viewer main {
   overflow: hidden;
   overflow-x: scroll;
 }
-pickering-yt-viewer main .short {
+pickering-yt-viewer main .pickering-yt-shorts-card {
   display: flex;
   flex-direction: column;
   max-width: 172px;
@@ -32,11 +32,11 @@ pickering-yt-viewer main .short {
   text-decoration: none;
   color: unset;
 }
-pickering-yt-viewer main .short * {
+pickering-yt-viewer main .pickering-yt-shorts-card * {
   text-decoration: none;
   text-transform: none;
 }
-pickering-yt-viewer main .short .close {
+pickering-yt-viewer main .pickering-yt-shorts-card .close {
   all: unset;
   position: absolute;
   top: 8px;
@@ -48,13 +48,13 @@ pickering-yt-viewer main .short .close {
   display: block;
   opacity: 0;
 }
-pickering-yt-viewer main .short img {
+pickering-yt-viewer main .pickering-yt-shorts-card img {
   width: 172px;
   aspect-ratio: 9/16;
   border-radius: 8px;
   background-color: rgba(48, 48, 48, 0.184);
 }
-pickering-yt-viewer main .short h2 {
+pickering-yt-viewer main .pickering-yt-shorts-card h2 {
   padding-top: 12px;
   font-size: 1.6rem;
   font-weight: 500;
@@ -63,12 +63,12 @@ pickering-yt-viewer main .short h2 {
   overflow: hidden;
   line-clamp: 2;
 }
-pickering-yt-viewer main .short p {
+pickering-yt-viewer main .pickering-yt-shorts-card p {
   font-size: 1.4rem;
   font-weight: 400;
   padding-top: 4px;
   color: var(--ytd-metadata-line-color, var(--yt-spec-text-secondary));
 }
-pickering-yt-viewer main .short:hover .close {
+pickering-yt-viewer main .pickering-yt-shorts-card:hover .close {
   opacity: 1;
 }
