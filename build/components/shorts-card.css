@@ -1,0 +1,49 @@
+.pickering-yt-shorts-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 172px;
+  margin-right: 16px;
+  position: relative;
+  text-decoration: none;
+  color: unset;
+}
+.pickering-yt-shorts-card * {
+  text-decoration: none;
+  text-transform: none;
+}
+.pickering-yt-shorts-card .close {
+  all: unset;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: red;
+  width: 16px;
+  height: 16px;
+  outline: unset;
+  display: block;
+  opacity: 0;
+}
+.pickering-yt-shorts-card img {
+  width: 172px;
+  aspect-ratio: 9/16;
+  border-radius: 8px;
+  background-color: rgba(48, 48, 48, 0.184);
+}
+.pickering-yt-shorts-card h2 {
+  padding-top: 12px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--yt-spec-text-primary);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-clamp: 2;
+}
+.pickering-yt-shorts-card p {
+  font-size: 1.4rem;
+  font-weight: 400;
+  padding-top: 4px;
+  color: var(--ytd-metadata-line-color, var(--yt-spec-text-secondary));
+}
+.pickering-yt-shorts-card:hover .close {
+  opacity: 1;
+}
