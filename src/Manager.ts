@@ -12,7 +12,7 @@ export default class Manager
         }
 
         // console.log(chrome.storage)
-        chrome.storage.sync.set({ [url]: build }).then(() => {
+        chrome.storage.local.set({ [url]: build }).then(() => {
           });
     }
 
@@ -46,7 +46,7 @@ export default class Manager
 
     deleteAll()
     {
-        chrome.storage.sync.clear()
+        chrome.storage.local.clear()
     }
 
     async getAll()
