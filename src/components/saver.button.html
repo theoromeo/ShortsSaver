@@ -22,7 +22,7 @@
     <style>
         pickering-yt-save
         {
-            padding-block: 16px;
+            padding-top: 16px;
             display: block;
         }
         pickering-yt-save > button 
@@ -68,6 +68,15 @@
             font-size: 1.4rem;
             margin-top: 4px;
             font-weight: 400;
+        }
+
+        pickering-yt-save.saved .icon > svg > g
+        {
+            fill: var(--yt-spec-text-primary-inverse);
+        }
+        pickering-yt-save.saved .icon
+        {
+            background-color: var(--yt-spec-text-primary);
         }
     </style>
 </pickering-yt-save>

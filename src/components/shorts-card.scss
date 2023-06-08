@@ -18,14 +18,19 @@
     {
         all: unset;
         position: absolute;
-        top: 8px;
-        right: 8px;
-        background-color: red;
-        width: 16px;
-        height: 16px;
+        margin: 4px;
+        right: 0;
+        background-color: var(--yt-spec-static-overlay-background-heavy);
+        border-radius: 4px;
+        color: var(--yt-spec-static-brand-white);
+        font-size: var(--yt-badge-font-size,1.2rem);
         outline: unset;
         display: block;
+        font-weight: var(--yt-badge-font-weight,500);
+        font-family: Roboto, Arial, sans-serif;
         opacity: 0;
+        padding:3px 4px;
+        
     }
     img 
     {
@@ -40,9 +45,11 @@
         font-size: 1.6rem;
         font-weight: 500;
         color: var(--yt-spec-text-primary);
-        text-overflow: ellipsis;
+        display: -webkit-box;
         overflow: hidden;
-        line-clamp: 2;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
     p 
     {
@@ -50,6 +57,7 @@
         font-weight: 400;
         padding-top: 4px;
         color: var(--ytd-metadata-line-color, var(--yt-spec-text-secondary));
+       
     }
     &:hover
     {
