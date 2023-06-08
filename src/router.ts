@@ -38,7 +38,7 @@ class Router
 
         const page = new URL(this.currentURL).pathname
 
-        if(page.startsWith("/feed/downloads"))
+        if(page.startsWith("/shorts"))
         {
             this.shortsRouteCallable.run()
             return true
