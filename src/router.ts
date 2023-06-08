@@ -4,15 +4,16 @@ class Router
     shortsRouteCallable:any
     playlistRouteCallable:any
 
-    init(shortsRouteCallable:CallableFunction ,playlistRouteCallable:CallableFunction)
+    constructor(shortsRouteCallable:Object ,playlistRouteCallable:Object)
     {
-        this.currentURL = window.location.href
-
+        
         this.shortsRouteCallable = shortsRouteCallable
         this.playlistRouteCallable = playlistRouteCallable
-
+        
         this.setTitleChangeListener()
+        this.doRoutes()
     }
+
 
     setTitleChangeListener()
     {
@@ -37,14 +38,14 @@ class Router
 
         const page = new URL(this.currentURL).pathname
 
-        if(page.startsWith("/shorts"))
+        if(page.startsWith("/feed/downloads"))
         {
-            this.shortsRouteCallable()
+            this.shortsRouteCallable.run()
             return true
         }
         else if ( page.startsWith("/playlist"))
         {
-            this.playlistRouteCallable()
+            this.playlistRouteCallable.run()
             return true
         }
 
