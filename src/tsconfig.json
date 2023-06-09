@@ -6,6 +6,7 @@
     "module": "esnext",
     "target": "ES2022",
     "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node"
   }
 }
