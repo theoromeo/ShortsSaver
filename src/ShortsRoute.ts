@@ -1,8 +1,8 @@
 import Manager from "./Manager"
 
 export default class ShortsRoute
-{   
-    saveButtonOuterHTML = `<pickering-yt-save>
+{
+    saveButtonHTML = `<pickering-yt-save>
     <button>
         <div class="icon">
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -85,87 +85,92 @@ export default class ShortsRoute
     </style>
 </pickering-yt-save>`
 
-    positionElementQueryString = 'ytd-reel-video-renderer[is-active] #share-button'
+    parentQuerySelector = 'ytd-reel-video-renderer[is-active] #actions'
+    positioningQuerySelector = 'ytd-reel-video-renderer[is-active] #share-button'
     buttonTagName = 'pickering-yt-save'
-    manager: Manager
-    changeTargetQuerySelector = 'ytd-reel-video-renderer[is-active]'
+    changingTargetQuerySelector = 'ytd-reel-video-renderer[is-active]'
+    currentURL = ''
 
-    constructor(manager: Manager)
+    manager: Manager
+
+    constructor(manager:Manager)
     {
         this.manager = manager
     }
 
     run()
     {
-        if(!this.setObserver())
+        if(!this.setObserver()){ return false }
+
+        this.currentURL = window.location.href
+        setTimeout(()=>{this.injectSaveButton()},1000)
+    }
+
+    injectSaveButton()
+    {
+        const positioningElement = document.querySelector(this.positioningQuerySelector)
+
+        if(!positioningElement){return false}
+
+        const parent = document.querySelector(this.parentQuerySelector)
+        
+        if(parent.querySelector(this.buttonTagName))
+        {
+            return null
+        }
+
+        positioningElement.insertAdjacentHTML("beforebegin", this.saveButtonHTML)
+
+        const saveButton = document.querySelector(this.buttonTagName)
+        saveButton.querySelector('.icon').addEventListener("click" , ()=>{this.eventSaveButton(saveButton)})
+
+        const isSaved = this.isSaved(this.currentURL)
+
+        if(isSaved)
+        {
+            saveButton.className = "saved"
+        }
+    }
+
+    isSaved(url:string)
+    {
+        return this.manager.exists(url)
+    }
+
+    eventSaveButton(button:Element)
+    {
+        if(button.classList.contains('saved'))
+        {
+            this.manager.delete(this.currentURL)
+            return 'deleted'
+        }
+
+        this.manager.save(this.currentURL)
+        button.className = 'saved' 
+
+        return 'saved'
+    }
+
+    setObserver()
+    {
+        const changingTarget = document.querySelector(this.changingTargetQuerySelector)
+        
+        if(!changingTarget)
         {
             return false
         }
 
-        this.injectSaveButton()
-    }
-
-    async injectSaveButton()
-    {
-        const positionElement = document.querySelector(this.positionElementQueryString)
-
-        if(!positionElement)
-        {
-            return false;
-        }
-
-        positionElement?.insertAdjacentHTML("beforebegin",this.saveButtonOuterHTML)
-
-        const saveButtonElement = document.querySelector(this.buttonTagName)
-        const isSaved = await this.isSaved(window.location.href)
-        if(isSaved)
-        {
-            saveButtonElement.setAttribute("class","saved")
-        }
-        saveButtonElement?.querySelector('icon')?.addEventListener('click', () => { this.eventSaveButton(saveButtonElement)})
-
-    }
-
-    async isSaved(url:string)
-    {
-        return await this.manager.doesExists(url)
-    }
-
-    eventSaveButton(saveButtonElement:Element )
-    {
-        const url = window.location.href
-
-        if(saveButtonElement.classList.contains('saved'))
-        {
-            this.manager.delete(url)
-            return "deleted"
-        }
-
-        this.manager.save(url)
-        return "saved"
-
-        
-    }
-
-    setObserver() :boolean
-    {
-        const target = document.querySelector(this.changeTargetQuerySelector) as Node
-        
-        if(!target)
-        {
-            console.error(`target node <${this.changeTargetQuerySelector}> not found`)
-            return false;
-        }
-
         const options = {attributes:true, attributeFilter:['is-active']}
-
         const observer = new MutationObserver(this.eventObserver.bind(this))
-        observer.observe(<Node>target,options)
+        observer.observe(<Node> changingTarget,options)
+
         return true
     }
 
     eventObserver(mutationList:any, observer:any)
     {
+        this.currentURL = window.location.href
         this.run()
     }
+
 }

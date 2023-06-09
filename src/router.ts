@@ -1,59 +1,52 @@
-class Router
+export default class Router 
 {
     currentURL = ''
-    shortsRouteCallable:any
-    playlistRouteCallable:any
-
-    constructor(shortsRouteCallable:Object ,playlistRouteCallable:Object)
-    {
-        
-        this.shortsRouteCallable = shortsRouteCallable
-        this.playlistRouteCallable = playlistRouteCallable
-        
-        this.setTitleChangeListener()
-        this.doRoutes()
-    }
-
-
-    setTitleChangeListener()
-    {
-        new MutationObserver(this.setTitleChangeListenerCallback.bind(this))
-        .observe(<Node> document.querySelector('title'),
-                {subtree:true,childList:true})
-    }
+    routes:any
     
-    setTitleChangeListenerCallback()
+
+    constructor()
+    {
+        this.setObserver()
+        
+    }
+
+    setObserver()
+    {
+        new MutationObserver(this.eventObserver.bind(this))
+        .observe(<Node> document.querySelector('title'),{subtree:true,childList:true})
+    }
+
+    eventObserver()
     {
         if(this.currentURL == window.location.href)
         {
             return false
         }
 
-        return this.doRoutes()
+        this.runRoutes()
     }
 
-    doRoutes()
+    add(route:string, object:Object)
+    {
+        this.routes[route] = object
+    }
+
+    runRoutes()
     {
         this.currentURL = window.location.href
 
         const page = new URL(this.currentURL).pathname
-
-        if(page.startsWith("/shorts"))
+        
+        for (const route in this.routes) 
         {
-            this.shortsRouteCallable.run()
-            return true
-        }
-        else if ( page.startsWith("/playlist"))
-        {
-            this.playlistRouteCallable.run()
-            return true
+            if(page.startsWith(route))
+            {
+                this.routes[route].run() 
+                return true
+            }
         }
 
         return false
 
     }
-
-
 }
-
-export default Router

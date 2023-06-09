@@ -1,40 +1,36 @@
 export default class Manager
 {
-    mode:"local"
-
-    save( url:string , title?:string, viewCount?:number, imageURL?:string)
+    save(url:string)
     {
-        let build = 
-        {
-            "title": title,
-            "viewCount":viewCount,
-            "imageURL":imageURL
-        }
-
-        // console.log(chrome.storage)
-        chrome.storage.local.set({ [url]: build }).then(() => {
-          });
+        chrome.storage.local.set({ [url]: Date() })
     }
 
-    async doesExists(url:string)
+    async exists(url:string)
     {
-        return chrome.storage.local.get(url).then((result) => {
+        return chrome.storage.local.get(url)
+        .then((result) => 
+        {
             let index = Object.keys(result).length
-            return (index == 0)? false :  true
-        });
-    }    
-
+            return (index > 0)? true :  false
+            
+        })
+    }
 
     async get(url:string)
     {
-         return chrome.storage.local.get(url).then((result) => {
+        return chrome.storage.local.get(url)
+        .then((result) => 
+        {
             let index = Object.keys(result).length
+            return (index > 0)? result : null
+        })
+    }
 
-            if (index == 0)
-            {
-                return false
-            }
-
+    async getAll()
+    {
+        return chrome.storage.local.get()
+        .then((result) => 
+        {
             return result
         });
     }
@@ -48,15 +44,4 @@ export default class Manager
     {
         chrome.storage.local.clear()
     }
-
-    async getAll()
-    {
-        return chrome.storage.local.get().then(result => {
-            return result
-          });
-
-          
-    }
-
 }
-

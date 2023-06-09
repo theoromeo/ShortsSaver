@@ -1,8 +1,10 @@
 import Manager from "./Manager"
+import ogs from 'open-graph-scraper'
 
 export default class PlaylistRoute 
 {
-    viewerOuterHTML = `<pickering-yt-viewer>
+  viewerHTML = `
+  <pickering-yt-viewer>
     <header>
 
       <svg id="pickering-yt-viewer-icon" viewBox="0 0 432 468" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -102,61 +104,89 @@ pickering-yt-viewer main {
     
 </pickering-yt-viewer>
 `
-    positionElementQueryString = '#contents > ytd-playlist-video-list-renderer'
-    manager: Manager
 
-    constructor(manager: Manager)
+  positioningQuerySelector = '#contents > ytd-playlist-video-list-renderer'
+  manager: Manager
+
+  constructor(manager: Manager)
+  {
+    this.manager = manager
+  }
+
+  run()
+  {
+    this.injectViewer()
+  }
+
+  async injectViewer()
+  {
+    const positioningElement = document.querySelector(this.positioningQuerySelector)
+
+    if(!positioningElement)
     {
-        this.manager = manager
+      return false
     }
 
-    run()
+    positioningElement.insertAdjacentHTML("afterbegin", this.viewerHTML)
+    const viewer = document.querySelector('pickering-yt-viewer')
+
+    await this.injectShorts(viewer.querySelector('main'))
+  }
+
+  async injectShorts(container:Element)
+  {
+    const savedShorts = this.manager.getAll()
+
+    for(const url in savedShorts)
     {
-        this.injectViewer()
+      this.injectShort(container,url)
     }
+  }
 
-    async injectViewer()
+  async injectShort(container:Element , url:string)
+  {
+    const short = await this.getOpenGraphInfo(url)
+    if(!short) return false 
+    container.appendChild(this.createShortsCard(url, short.imageURL, short.title, short.viewCount))
+
+  }
+
+  async getOpenGraphInfo(url:string)
+  {
+    // finish and test
+    return ogs({"url":url})
+    .then((data) => 
     {
-        const positionElement = document.querySelector(this.positionElementQueryString)
-        positionElement?.insertAdjacentHTML("afterbegin", this.viewerOuterHTML)
+      const {error , result} = data
+      if(error) return false
 
-        const viewerElement = document.querySelector('pickering-yt-viewer')
-        viewerElement.innerHTML = await this.getShorts()
-    }
+      if(!result.success) return false 
 
-    async getShorts()
-    {
-        const shorts = await this.manager.getAll()
-        let compiledShorts = '';
-
-        shorts.forEach((short: any) => 
-        {
-            compiledShorts += this.createShortsCard(short.url,short.imageURL,short.title,short.viewCount)
-        });
-
-        return compiledShorts
-
-    }
-
-    createShortsCard(url:string, imageURL:string, title:string, viewCount:number , returnAs:'html'|'element' = 'html')
-    {
-        let element = document.createElement('a')
-        element.className = 'pickering-yt-shorts-card'
-        element.href = url
-        element.innerHTML = `<button class="close">Delete</button><img src="${imageURL}" alt=""><h2>${title}</h2><p>${viewCount}Views</p>`
-        element.querySelector('button').addEventListener('click', ()=>{this.eventDeleteCard(element)})
-        
-        if(returnAs == 'element')
-        {
-            return element
+      return {
+          imageURL:'',
+          title:'',
+          viewCount:''
         }
-       
-        return element.outerHTML
-    }
 
-    eventDeleteCard(element:Element)
-    {
-        this.manager.delete(element.getAttribute('href'))
-        element.remove()
-    }
+    })
+  }
+
+  createShortsCard(url:string , imageURL: string, title: string, viewCount: string )
+  {
+    let card = document.createElement('a')
+        card.className = 'pickering-yt-shorts-card'
+        card.href = url
+        card.innerHTML = `<button class="close">Delete</button><img src="${imageURL}" alt=""><h2>${title}</h2><p>${viewCount}Views</p>`
+        card.querySelector('button').addEventListener('click', (event) => { event.preventDefault();  this.eventDeleteShort(url,card)})
+
+    return card
+  }
+
+  eventDeleteShort(url:string, card:Element)
+  {
+    this.manager.delete(url)
+    card.remove()
+
+  }
+
 }
