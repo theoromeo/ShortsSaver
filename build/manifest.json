@@ -19,7 +19,8 @@
             "matches":
             [
                 "https://www.youtube.com/*"
-            ]
+            ],
+            "css": "./components/style.css"
         }
     ],
     
