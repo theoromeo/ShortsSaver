@@ -22,67 +22,6 @@ export default class ShortsRoute
 
         <label for="">Save</label>
     </button>
-
-    <style>
-        pickering-yt-save
-        {
-            padding-top: 16px;
-            display: block;
-        }
-        pickering-yt-save > button 
-        {
-            all:unset;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 48px;
-        }
-        pickering-yt-save .icon 
-        {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            /* aspect-ratio: 1/1; */
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background-color: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-        }
-        pickering-yt-save .icon:hover
-        {
-            background-color: rgba(255, 255, 255, 0.3);
-            
-        }
-        pickering-yt-save .icon > svg 
-        {
-            width: 24px;
-
-        }
-        pickering-yt-save .icon > svg > g 
-        {
-            fill: white;
-        }
-
-        pickering-yt-save label 
-        {
-            color: white;
-            font-size: 1.4rem;
-            margin-top: 4px;
-            font-weight: 400;
-        }
-
-        pickering-yt-save.saved .icon > svg > g
-        {
-            fill: var(--yt-spec-text-primary-inverse);
-        }
-        pickering-yt-save.saved .icon
-        {
-            background-color: var(--yt-spec-text-primary);
-        }
-    </style>
 </pickering-yt-save>`
 
     parentQuerySelector = 'ytd-reel-video-renderer[is-active] #actions'
