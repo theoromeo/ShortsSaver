@@ -2,12 +2,12 @@ export default class Manager
 {
     async save(url:string)
     {
-        return chrome.storage.local.set({ [url]: Date().toString() })
+        return chrome.storage.sync.set({ [url]: Date().toString() })
     }
 
     async exists(url:string)
     {
-        return chrome.storage.local.get(url)
+        return chrome.storage.sync.get(url)
         .then((result) => 
         {
             let index = Object.keys(result).length
@@ -18,7 +18,7 @@ export default class Manager
 
     async get(url:string)
     {
-        return chrome.storage.local.get(url)
+        return chrome.storage.sync.get(url)
         .then((result) => 
         {
             let index = Object.keys(result).length
@@ -28,7 +28,7 @@ export default class Manager
 
     async getAll()
     {
-        return chrome.storage.local.get()
+        return chrome.storage.sync.get()
         .then((result) => 
         {
             return result
@@ -37,11 +37,11 @@ export default class Manager
 
     async delete(url:string)
     {
-        return chrome.storage.local.remove(url);
+        return chrome.storage.sync.remove(url);
     }
 
     async deleteAll()
     {
-        return chrome.storage.local.clear()
+        return chrome.storage.sync.clear()
     }
 }
