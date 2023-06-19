@@ -7,8 +7,5 @@
   },
   "scripts": {
     "build": "webpack"
-  },
-  "dependencies": {
-    "open-graph-scraper": "^6.1.0"
   }
 }

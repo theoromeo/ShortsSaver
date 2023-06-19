@@ -1,8 +1,8 @@
 export default class Manager
 {
-    save(url:string)
+    async save(url:string)
     {
-        chrome.storage.local.set({ [url]: Date() })
+        return chrome.storage.local.set({ [url]: Date().toString() })
     }
 
     async exists(url:string)
@@ -35,13 +35,13 @@ export default class Manager
         });
     }
 
-    delete(url:string)
+    async delete(url:string)
     {
-        chrome.storage.local.remove(url);
+        return chrome.storage.local.remove(url);
     }
 
-    deleteAll()
+    async deleteAll()
     {
-        chrome.storage.local.clear()
+        return chrome.storage.local.clear()
     }
 }

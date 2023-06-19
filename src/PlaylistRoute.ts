@@ -1,5 +1,5 @@
 import Manager from "./Manager"
-import ogs from 'open-graph-scraper'
+
 
 export default class PlaylistRoute 
 {
@@ -23,7 +23,9 @@ export default class PlaylistRoute
 `
 
   positioningQuerySelector = '#contents > ytd-playlist-video-list-renderer'
+  emptyViewHTML = `<p class="empty"> No Saved Shorts</p>`
   manager: Manager
+
 
   constructor(manager: Manager)
   {
@@ -32,11 +34,22 @@ export default class PlaylistRoute
 
   run()
   {
-    this.injectViewer()
+    setTimeout(()=> {
+      this.injectViewer()
+    },1000)
   }
 
   async injectViewer()
   {
+    if(document.querySelector('pickering-yt-viewer'))
+    {
+      const main = document.querySelector('pickering-yt-viewer  main')
+      main.innerHTML = ''
+      await this.injectShorts(main)
+
+      return true;
+    }
+
     const positioningElement = document.querySelector(this.positioningQuerySelector)
 
     if(!positioningElement)
@@ -46,13 +59,21 @@ export default class PlaylistRoute
 
     positioningElement.insertAdjacentHTML("afterbegin", this.viewerHTML)
     const viewer = document.querySelector('pickering-yt-viewer')
-
     await this.injectShorts(viewer.querySelector('main'))
   }
 
   async injectShorts(container:Element)
   {
-    const savedShorts = this.manager.getAll()
+    const savedShorts = await this.manager.getAll()
+
+    const shortsCount = Object.keys(savedShorts).length
+
+    if(shortsCount < 1 )
+    {
+      container.innerHTML = this.emptyViewHTML
+      return true;
+
+    }
 
     for(const url in savedShorts)
     {
@@ -63,37 +84,48 @@ export default class PlaylistRoute
   async injectShort(container:Element , url:string)
   {
     const short = await this.getOpenGraphInfo(url)
+    console.log(short)
+
     if(!short) return false 
-    container.appendChild(this.createShortsCard(url, short.imageURL, short.title, short.viewCount))
+    container.appendChild(this.createShortsCard(url, short.imageURL, short.title))
 
   }
 
   async getOpenGraphInfo(url:string)
   {
-    // finish and test
-    return ogs({"url":url})
-    .then((data) => 
+    try 
     {
-      const {error , result} = data
-      if(error) return false
+      const response = await fetch(url)
+      const html = await response.text()
 
-      if(!result.success) return false 
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(html,'text/html')
+      
+      const image = doc.querySelector(`meta[property="og:image"]`).getAttribute("content")
+      const title = doc.querySelector(`meta[property="og:title"]`).getAttribute("content")
 
       return {
-          imageURL:'',
-          title:'',
-          viewCount:''
-        }
+        imageURL:image,
+        title: title
+      }
+    } 
+    
+    catch (error) 
+    {
+      return false
+    }
 
-    })
+
+    
   }
 
-  createShortsCard(url:string , imageURL: string, title: string, viewCount: string )
+  createShortsCard(url:string , imageURL: string, title: string )
   {
     let card = document.createElement('a')
         card.className = 'pickering-yt-shorts-card'
         card.href = url
-        card.innerHTML = `<button class="close">Delete</button><img src="${imageURL}" alt=""><h2>${title}</h2><p>${viewCount}Views</p>`
+        // card.innerHTML = `<button class="close">Delete</button><img src="${imageURL}" alt=""><h2>${title}</h2><p>${viewCount}Views</p>`
+        card.innerHTML = `<button class="close">Delete</button><img src="${imageURL}" alt=""><h2>${title}</h2>`
         card.querySelector('button').addEventListener('click', (event) => { event.preventDefault();  this.eventDeleteShort(url,card)})
 
     return card
@@ -104,6 +136,42 @@ export default class PlaylistRoute
     this.manager.delete(url)
     card.remove()
 
+  }
+
+  abbrNum (number:any, decPlaces:any = 1)
+  {
+    // 2 decimal places => 100, 3 => 1000, etc
+    decPlaces = Math.pow(10, decPlaces)
+  
+    // Enumerate number abbreviations
+    var abbrev = ['k', 'm', 'b', 't']
+  
+    // Go through the array backwards, so we do the largest first
+    for (var i = abbrev.length - 1; i >= 0; i--) {
+      // Convert array index to "1000", "1000000", etc
+      var size = Math.pow(10, (i + 1) * 3)
+  
+      // If the number is bigger or equal do the abbreviation
+      if (size <= number) {
+        // Here, we multiply by decPlaces, round, and then divide by decPlaces.
+        // This gives us nice rounding to a particular decimal place.
+        number = Math.round((number * decPlaces) / size) / decPlaces
+  
+        // Handle special case where we round up to the next abbreviation
+        if (number == 1000 && i < abbrev.length - 1) {
+          number = 1
+          i++
+        }
+  
+        // Add the letter for the abbreviation
+        number += abbrev[i]
+  
+        // We are done... stop
+        break
+      }
+    }
+  
+    return number
   }
 
 }

@@ -20,7 +20,7 @@
             [
                 "https://www.youtube.com/*"
             ],
-            "css": "./components/style.css"
+            "css": ["./components/style.css"]
         }
     ],
     

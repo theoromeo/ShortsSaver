@@ -1,13 +1,12 @@
 export default class Router 
 {
     currentURL = ''
-    routes:any
+    routes = new Map()
     
 
     constructor()
     {
         this.setObserver()
-        
     }
 
     setObserver()
@@ -28,25 +27,28 @@ export default class Router
 
     add(route:string, object:Object)
     {
-        this.routes[route] = object
+        this.routes.set(route, object)
     }
 
     runRoutes()
     {
-        this.currentURL = window.location.href
 
+        this.currentURL = window.location.href
         const page = new URL(this.currentURL).pathname
         
-        for (const route in this.routes) 
+        this.routes.forEach((value,key) => 
         {
-            if(page.startsWith(route))
+            if(!page.startsWith(key))
             {
-                this.routes[route].run() 
-                return true
+                return false
             }
-        }
+
+            value.run()
+            return true
+        })
 
         return false
+
 
     }
 }

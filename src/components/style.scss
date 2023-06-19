@@ -29,6 +29,17 @@ pickering-yt-viewer
         display: flex;
         overflow: hidden;
         overflow-x: scroll;
+        padding-bottom: 16px;
+
+        .empty
+        {
+            padding: 16px;
+            padding-top: 0;
+            font-family: "Roboto","Arial",sans-serif;
+            font-size: 1.2rem;
+            color: var(--yt-spec-text-secondary);
+        }
+
 
         .pickering-yt-shorts-card
         {
@@ -68,6 +79,7 @@ pickering-yt-viewer
             {
                 width: 172px;
                 aspect-ratio: 9/16;
+                object-fit: cover;
                 border-radius: 8px;
                 background-color: rgba(48, 48, 48, 0.184);
             }

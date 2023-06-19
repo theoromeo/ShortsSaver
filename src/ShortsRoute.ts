@@ -45,7 +45,7 @@ export default class ShortsRoute
         setTimeout(()=>{this.injectSaveButton()},1000)
     }
 
-    injectSaveButton()
+    async injectSaveButton()
     {
         const positioningElement = document.querySelector(this.positioningQuerySelector)
 
@@ -60,29 +60,27 @@ export default class ShortsRoute
 
         positioningElement.insertAdjacentHTML("beforebegin", this.saveButtonHTML)
 
-        const saveButton = document.querySelector(this.buttonTagName)
+        const saveButton = parent.querySelector(this.buttonTagName)
         saveButton.querySelector('.icon').addEventListener("click" , ()=>{this.eventSaveButton(saveButton)})
 
-        const isSaved = this.isSaved(this.currentURL)
-
+        const isSaved = await this.manager.exists(this.currentURL)
+        
         if(isSaved)
         {
             saveButton.className = "saved"
         }
     }
 
-    isSaved(url:string)
-    {
-        return this.manager.exists(url)
-    }
 
     eventSaveButton(button:Element)
     {
         if(button.classList.contains('saved'))
         {
             this.manager.delete(this.currentURL)
+            button.classList.remove("saved")
             return 'deleted'
         }
+
 
         this.manager.save(this.currentURL)
         button.className = 'saved' 
@@ -108,7 +106,6 @@ export default class ShortsRoute
 
     eventObserver(mutationList:any, observer:any)
     {
-        this.currentURL = window.location.href
         this.run()
     }
 
