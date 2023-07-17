@@ -14,7 +14,5 @@ const shortsRoute = new ShortsRoute(manager)
 const playlistRoute = new PlaylistRoute(manager)
 
 router.add("/shorts" , shortsRoute)
-router.add("/playlist" , playlistRoute)
+router.add("/playlist?list=WL" , playlistRoute)
 router.runRoutes()
-
-
