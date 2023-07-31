@@ -6,7 +6,6 @@ import PlaylistRoute from "./PlaylistRoute"
 
 
 const manager = new Manager()
-console.log(await manager.getAll())
 
 const router = new Router()
 
