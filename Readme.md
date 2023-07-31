@@ -13,3 +13,9 @@ npm run build
 ```
 Will compile the code in `/src` into a single `/build/app.js` file.
 
+
+## Package a Distributable 
+```console
+npm run package
+```
+Will zip the `/build` folder
