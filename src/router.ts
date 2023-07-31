@@ -34,7 +34,9 @@ export default class Router
     {
 
         this.currentURL = window.location.href
-        const page = new URL(this.currentURL).pathname
+        const url = new URL(this.currentURL)
+        const page = url.pathname+url.search
+
         
         this.routes.forEach((value,key) => 
         {
