@@ -31,7 +31,7 @@ export default class Manager
         return chrome.storage.sync.get()
         .then((result) => 
         {
-            return result
+            return Object.keys(result).reverse()
         });
     }
 

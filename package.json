@@ -8,6 +8,6 @@
   },
   "scripts": {
     "build": "webpack",
-    "package": "cd build && bestzip ../dist/dist-.zip *"
+    "package": "cd npm run build && bestzip ../dist/dist-.zip *"
   }
 }

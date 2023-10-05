@@ -75,16 +75,15 @@ export default class PlaylistRoute
 
     }
 
-    for(const url in savedShorts)
+    for(let index = 0 ; index <= shortsCount ; index++)
     {
-      this.injectShort(container,url)
+        await this.injectShort(container,savedShorts[index])
     }
   }
 
   async injectShort(container:Element , url:string)
   {
     const short = await this.getOpenGraphInfo(url)
-    console.log(short)
 
     if(!short) return false 
     container.appendChild(this.createShortsCard(url, short.imageURL, short.title))
