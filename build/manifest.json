@@ -1,8 +1,11 @@
 {
     "manifest_version":3,
     "name": "ShortsSaver by Pickering",
-    "version":"1.8",
+    "version":"0.1.8",
     "description":"ShortsSaver allows you to  save YouTube Shorts videos for later viewing. With just a single click, you can store Shorts directly to your YouTube 'Watch Later' tab.",
+    "default_locale": "en",
+    "author": "theoromeo@gmail.com", 
+    "short_name":"ShortsSaver",
 
     "icons": 
     {
