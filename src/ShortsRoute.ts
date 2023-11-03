@@ -1,6 +1,6 @@
 import Manager from "./Manager"
 
-export default class ShortsRoute
+export default class ShortsRoute implements Runnable
 {
     saveButtonHTML = `<pickering-yt-save>
     <button>

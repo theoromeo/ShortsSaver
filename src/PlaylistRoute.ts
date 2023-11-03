@@ -1,7 +1,7 @@
-import Manager from "./Manager"
+import Manager from "./Manager" 
 
 
-export default class PlaylistRoute 
+export default class PlaylistRoute implements Runnable
 {
   viewerHTML = `
   <pickering-yt-viewer>
