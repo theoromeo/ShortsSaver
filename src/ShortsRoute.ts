@@ -39,8 +39,10 @@ export default class ShortsRoute implements Runnable
 
     run()
     {
-        if(!this.setObserver()){ return false }
-
+        if(!this.setObserver())
+        { 
+            window.onload = () => this.setObserver();
+        }
         this.currentURL = window.location.href
         setTimeout(()=>{this.injectSaveButton()},1000)
     }
@@ -49,7 +51,10 @@ export default class ShortsRoute implements Runnable
     {
         const positioningElement = document.querySelector(this.positioningQuerySelector)
 
-        if(!positioningElement){return false}
+        if(!positioningElement)
+        {
+            return false
+        }
 
         const parent = document.querySelector(this.parentQuerySelector)
         

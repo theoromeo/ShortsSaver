@@ -1,7 +1,7 @@
 {
     "manifest_version":3,
     "name": "ShortsSaver by Pickering",
-    "version":"0.1.8",
+    "version":"0.1.9",
     "description":"ShortsSaver allows you to  save YouTube Shorts directly to your YouTube 'Watch Later' tab.",
     "author": "theoromeo@gmail.com", 
     "short_name":"ShortsSaver",
